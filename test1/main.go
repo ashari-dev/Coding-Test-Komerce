@@ -18,7 +18,7 @@ func main() {
 
 func sortChart(str string) {
 	vowel := "aiueo"
-	var vowelChart, consonChart string
+	var vowelChart, consonantChart string
 
 	str = strings.ToLower(str)
 	for _, char := range str {
@@ -26,11 +26,11 @@ func sortChart(str string) {
 			if strings.ContainsRune(vowel, char) {
 				vowelChart += string(char)
 			} else {
-				consonChart += string(char)
+				consonantChart += string(char)
 			}
 		}
 	}
 
 	fmt.Println("Vowel Characters : ", vowelChart)
-	fmt.Println("Consonant Characters : ", consonChart)
+	fmt.Println("Consonant Characters : ", consonantChart)
 }

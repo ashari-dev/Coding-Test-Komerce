@@ -4,85 +4,68 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
 
 func main() {
-	read := bufio.NewReader(os.Stdin)
+	scanner := bufio.NewReader(os.Stdin)
 
 	fmt.Print("Input the number of families : ")
-	inputFams, _ := read.ReadString(('\n'))
-	inputFams = strings.TrimSpace(inputFams)
-	n, err := strconv.Atoi(inputFams)
+	num, _ := scanner.ReadString('\n')
+	num = strings.TrimSpace(num)
+	n, err := strconv.Atoi(num)
 	if err != nil {
-		fmt.Println("Invalid Input")
+		fmt.Println("Invalid input. Please enter a number.")
 		return
 	}
 
-	fmt.Print("Input the number of members in the family (separated by space) : ")
-	inputMembers, _ := read.ReadString('\n')
-	inputMembers = strings.TrimSpace(inputMembers)
-	memberStrings := strings.Split(inputMembers, " ")
+	fmt.Print("Input the number of members in the family (separated by a space) : ")
+	numMembers, _ := scanner.ReadString('\n')
+	numMembers = strings.TrimSpace(numMembers)
+	members := strings.Split(numMembers, " ")
 
-	if len(memberStrings) != n {
+	if len(members) != n {
 		fmt.Println("Input must be equal with count of family")
 		return
 	}
 
 	family := make([]int, n)
-	for i, v := range memberStrings {
+
+	for i, v := range members {
 		family[i], err = strconv.Atoi(v)
 		if err != nil || family[i] <= 0 {
-			fmt.Println("Invalid input")
+			fmt.Println("Invalid Input")
+			return
+		}
+		if family[i] > 4 {
+			fmt.Println("Each family member must be less than or equal to 4")
 			return
 		}
 	}
 
-	for _, v := range family {
-		if v > 4 {
-			fmt.Println("families cannot be put into one bus, the members of family is more than 4")
-			return
-		}
-	}
-
-	result := minBuss(family)
-
-	fmt.Println("Minimum buss : ", result)
-	fmt.Println(family)
+	minBus(family)
 }
 
-func minBuss(fams []int) int {
+func minBus(fams []int) {
 	bus := 0
-	n := len(fams)
+	visit := make([]bool, len(fams))
+	sort.Slice(fams, func(i, j int) bool { return fams[j] < fams[i] })
 
-	sortSlice(fams)
-
-	visited := make([]bool, n)
-
-	for i := 0; i < n; i++ {
-		if visited[i] {
+	for i := 0; i < len(fams); i++ {
+		if visit[i] {
 			continue
 		}
 		bus++
-		visited[i] = true
-		for j := i + 1; j < n; j++ {
-			if !visited[j] && fams[i]+fams[j] <= 4 {
-				visited[j] = true
+		visit[i] = true
+		for j := i + 1; j < len(fams); j++ {
+			if !visit[j] && fams[i]+fams[j] <= 4 {
+				visit[j] = true
 				break
 			}
 		}
 	}
 
-	return bus
-}
-
-func sortSlice(arr []int) {
-	for i := 0; i < len(arr)-1; i++ {
-		for j := i + 1; j < len(arr); j++ {
-			if arr[i] < arr[j] {
-				arr[i], arr[j] = arr[j], arr[i]
-			}
-		}
-	}
+	fmt.Println("Minimum bus required is :", bus)
 }
