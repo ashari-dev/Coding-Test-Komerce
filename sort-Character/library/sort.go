@@ -2,6 +2,7 @@ package library
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -20,6 +21,9 @@ func SortChart(str string) {
 		}
 	}
 
-	fmt.Println("Vowel Characters : ", vowelChart)
+	chartVowwl := strings.Split(vowelChart, "")
+	sort.Strings(chartVowwl)
+
+	fmt.Println("Vowel Characters : ", strings.Join(chartVowwl, ""))
 	fmt.Println("Consonant Characters : ", consonantChart)
 }
